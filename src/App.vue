@@ -3,14 +3,13 @@
     <el-menu  class="el-menu-demo" mode="horizontal" router=true>
       <el-menu-item index="/">首页</el-menu-item>
       <el-menu-item index="/blog">博客</el-menu-item>
-      <el-menu-item index="/blogEdit">编辑博客</el-menu-item>
-      <el-submenu v-if=this.$store.getters.getUser.userId>
+      <el-submenu class="uuu" v-if=this.$store.getters.getUser.userId>
         <template slot="title">
 <!--          <el-avatar :size="40" :src="photo"></el-avatar>-->
           {{this.$store.getters.getUser.userName}}
         </template>
-        <el-menu-item index="2-1">我的信息</el-menu-item>
-        <el-menu-item @click="check">我的动态</el-menu-item>
+<!--        <el-menu-item index="2-1">我的信息</el-menu-item>-->
+<!--        <el-menu-item @click="check">我的动态</el-menu-item>-->
         <el-menu-item @click="logout">退出</el-menu-item>
       </el-submenu>
       <el-menu-item v-else index="/login">登陆</el-menu-item>
@@ -22,6 +21,8 @@
   export default {
     data() {
       return {
+          drawer: false,
+          innerDrawer: false,
       };
     },
     methods: {
@@ -32,7 +33,12 @@
         this.$store.commit("REMOVE_INFO")
         this.status=false
       }
-    }
+    },
+      created() {
+        if(this.$store.getters.getUser==null){
+            this.$store.commit("SET_USERINFO", {userId:""})
+        }
+      }
   }
 </script>
 
@@ -45,9 +51,12 @@
   color: #2c3e50;
 }
 
+.uuu{
+    margin-right: 10%;
+}
 #nav {
-  padding: 30px;
-  max-width: 80vw;
+  padding: 20px;
+  max-width: 70vw;
   margin-left: 10vw;
 }
 

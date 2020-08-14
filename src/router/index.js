@@ -4,7 +4,6 @@ import Index from '../views/Index'
 import Login from '../views/Login'
 import Blog from '../views/Blog'
 import Register from '../views/Register'
-import Test from "../views/Test"
 import BlogEdit from "../views/BlogEdit";
 import BlogDetail from "../views/BlogDetail";
 
@@ -25,16 +24,19 @@ Vue.use(VueRouter)
       path: '/register',
       component: Register
     },{
-      path: '/test',
-      component: Test
-    },{
       path: '/blogEdit',
       name: 'BlogEdit',
-      component: BlogEdit
+      component: BlogEdit,
+      meta: {
+        requireAuth: true
+      },
     },{
       path: 'blogDetail',
       name: 'BlogDetail',
-      component: BlogDetail
+      component: BlogDetail,
+      meta: {
+        requireAuth: true
+      },
     }
 ]
 

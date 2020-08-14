@@ -1,21 +1,24 @@
 <template>
     <div id="header">
+        <el-divider></el-divider>
         <el-timeline>
             <el-timeline-item :timestamp="blog.created" placement="top" v-for="blog in blogs">
                 <el-card>
-                    <h4>
+                    <h2>
                         <router-link :to="{name: 'BlogDetail', params: {blogId: blog.blogId}}">
                             {{blog.title}}
                         </router-link>
-                    </h4>
+                    </h2>
                     <p>{{blog.description}}</p>
                 </el-card>
+                <el-divider></el-divider>
             </el-timeline-item>
 
         </el-timeline>
 
         <el-pagination class="mpage"
                        background
+                       align="center"
                        layout="prev, pager, next"
                        :current-page="currentPage"
                        :page-size="pageSize"
@@ -58,7 +61,7 @@
         methods: {
             page(currentPage) {
                 const _this = this
-                _this.$axios.post("/blog/findAllByUserId?userId="+1+"&currentPage="+currentPage).then(res => {
+                _this.$axios.get("/blog/findAllByUserId?userId="+1+"&currentPage="+currentPage).then(res => {
                     console.log(res)
                     _this.blogs = res.data.data.data
                     _this.currentPage = res.data.data.currentPage
@@ -82,5 +85,10 @@
     }
     .header {
         margin-left: 30vw;
+    }
+    #mpage{
+        margin-top: 200vh;
+        margin: auto;
+
     }
 </style>

@@ -28,8 +28,8 @@
             return {
                 user: {
                     userName : '',
-                    userAccount : 'zhangsan',
-                    userPassword : 'test',
+                    userAccount : '',
+                    userPassword : '',
                     roleId : ''
                 },
                 rules: {

@@ -21,7 +21,7 @@ axios.interceptors.response.use(response => {
         } else {
             // 弹窗异常信息
             Element.Message({
-                message: response.data.msg,
+                message: response.data.message,
                 type: 'error',
                 duration: 2 * 1000
             })

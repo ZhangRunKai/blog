@@ -14,6 +14,8 @@ import "element-ui/lib/theme-chalk/index.css"
 
 import "./axios"
 
+import './permission'
+
 Vue.use(Element)
 
 Vue.config.productionTip = false

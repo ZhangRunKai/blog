@@ -13,7 +13,7 @@
                 </el-form-item>
 
                 <el-form-item label="内容" prop="content">
-                    <mavon-editor v-model="ruleForm.content"></mavon-editor>
+                    <mavon-editor  ref=md @imgAdd="$imgAdd" @imgDel="$imgDel" v-model="ruleForm.content"></mavon-editor>
                 </el-form-item>
 
                 <el-form-item>
@@ -35,10 +35,12 @@
         data() {
             return {
                 ruleForm: {
-                    id: '',
+                    blogId: '',
                     title: '',
                     description: '',
-                    content: ''
+                    content: '',
+                    flag:false,
+                    userId:''
                 },
                 rules: {
                     title: [
@@ -55,22 +57,39 @@
             };
         },
         methods: {
-            submitForm(formName) {
+
+            submitForm(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         const _this = this
-                        this.$axios.post('/blog/save', this.ruleForm, {
-                        }).then(res => {
-                            console.log(res)
-                            _this.$alert('操作成功', '提示', {
-                                confirmButtonText: '确定',
-                                callback: action => {
-                                    _this.$router.push("/blogs")
-                                }
-                            });
+                        if(_this.ruleForm.flag){
+                            this.$axios.post('/blog/update', this.ruleForm, {
+                            }).then(res => {
+                                console.log(res)
+                                _this.$alert('操作成功', '提示', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        _this.$router.push("/blog")
+                                    }
+                                });
 
-                        })
+                            })
+                            this.$router.push("/blog")
+                        }
+                        else{
+                            this.$axios.post('/blog/save', this.ruleForm, {
+                            }).then(res => {
+                                console.log(res)
+                                _this.$alert('操作成功', '提示', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        _this.$router.push("/blog")
+                                    }
+                                });
 
+                            })
+                            this.$router.push("/blog")
+                        }
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -79,7 +98,22 @@
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
-            }
+            },
+            // 绑定@imgAdd event
+            $imgAdd(pos, $file){
+                // 第一步.将图片上传到服务器.
+                var formdata = new FormData();
+                formdata.append('image', $file);
+                axios({
+                    url: 'server url',
+                    method: 'post',
+                    data: formdata,
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                }).then((url) => {
+                    // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+                    // $vm.$img2Url 详情见本页末尾
+                    $vm.$img2Url(pos, url);
+                })}
         },
         created() {
             const blogId = this.$route.params.blogId
@@ -88,10 +122,12 @@
             if(blogId) {
                 this.$axios.get('/blog/findBlogId?blogId=' + blogId).then(res => {
                     const blog = res.data.data
-                    _this.ruleForm.id = blog.id
+                    _this.ruleForm.blogId = blog.blogId
                     _this.ruleForm.title = blog.title
                     _this.ruleForm.description = blog.description
                     _this.ruleForm.content = blog.content
+                    _this.ruleForm.userId = blog.userId
+                    _this.ruleForm.flag=true
                 })
             }
 
